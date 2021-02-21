@@ -1,8 +1,13 @@
 import React from 'react';
 import Head from 'next/head';
 import Sidebar from "./Sidebar";
+import { useRouter } from "next/router";
 
 const Layout = ({ children }) => {
+
+    // Hook de routing
+    const router = useRouter();
+
     return (
         <>
             <Head>
@@ -12,6 +17,14 @@ const Layout = ({ children }) => {
                       crossOrigin="anonymous"/>
                 <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
             </Head>
+
+            { router.pathname === '/login' || router.pathname === '/cadastro' ? (
+                <div className="bg-gray-800 min-h-screen flex flex-col justify-center">
+                    <div>
+                        { children }
+                    </div>
+                </div>
+            ) : (
             <div className="bg-gray-200 min-h-screen">
                 <div className="flex min-h-screen">
                     <Sidebar />
@@ -21,6 +34,7 @@ const Layout = ({ children }) => {
 
                 </div>
             </div>
+            )};
         </>
     );
 }
