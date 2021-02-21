@@ -1,9 +1,12 @@
 import styles from '../styles/Home.module.css'
+import Layout from "../components/Layout";
 
-export default function Home() {
+const Index = () => {
   return (
-    <div className={styles.container}>
-
-    </div>
+      <Layout>
+        <h1 className="text-2xl text-gray-800 font-light">Painel Geral</h1>
+      </Layout>
   )
 }
+
+export default Index;
