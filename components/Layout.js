@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
     return (
         <>
             <Head>
-                <title>CNDV - Back-Office</title>
+                <title>e-CNDV - BackOffice</title>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
                       integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
                       crossOrigin="anonymous"/>
@@ -19,7 +19,7 @@ const Layout = ({ children }) => {
             </Head>
 
             { router.pathname === '/login' || router.pathname === '/cadastro' ? (
-                <div className="bg-gray-800 min-h-screen flex flex-col justify-center">
+                <div className="bg-blue-900 min-h-screen flex flex-col justify-center">
                     <div>
                         { children }
                     </div>

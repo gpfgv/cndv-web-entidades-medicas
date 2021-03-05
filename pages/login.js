@@ -5,7 +5,7 @@ const Login = () => {
     return (
         <>
             <Layout>
-                <h1 className="text-center text-2xl text-white font-light">Login BackOffice</h1>
+                <h1 className="text-center text-2xl text-white font-light">e-CNDV</h1>
 
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-sm">
@@ -32,7 +32,7 @@ const Login = () => {
                            </div>
                            <input
                                type="submit"
-                               className="bg-gray-800 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900"
+                               className="bg-blue-900 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900"
                                value="Entrar"
                            />
                        </form>
