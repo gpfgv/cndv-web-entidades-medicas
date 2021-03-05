@@ -1,5 +1,19 @@
 import React from 'react';
 import Layout from "../components/Layout";
+import { gql, useQuery } from '@apollo/client';
+
+const OBTENER_CAMPANHAS = gql`
+    query obtenerCampanhas{
+        obtenerCampanhas{
+            id
+            nome
+            idade_inicio
+            idade_final
+            municipio
+            uf
+        }
+    }
+`;
 
 const Campanhas = () => {
     return (

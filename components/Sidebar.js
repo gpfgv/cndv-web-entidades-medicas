@@ -27,10 +27,10 @@ const Sidebar = ({ children }) => {
                       </a>
                   </Link>
               </li>
-              <li className={router.pathname === "/vacinas" ? "bg-blue-600 p-2" : "p-2"}>
-                  <Link href="/vacinas">
+              <li className={router.pathname === "/cidadoes" ? "bg-blue-600 p-2" : "p-2"}>
+                  <Link href="/cidadoes">
                       <a className="text-white block">
-                          Vacinas
+                          Cidadões
                       </a>
                   </Link>
               </li>
