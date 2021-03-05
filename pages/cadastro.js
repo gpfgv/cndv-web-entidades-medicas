@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import Layout from "../components/Layout";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useMutation, gql } from '@apollo/client';
+
+const NOVO_USUARIO_ACESSO = gql`
+     mutation novoUsuarioAcesso($input: UsuarioInput) {
+            novoUsuarioAcesso(input: $input) {
+                cpf
+                nome
+                email
+            }
+        }
+`;
 
 const Cadastro = () => {
+
+    // State for message
+    const [message, saveMessage] = useState(null);
+
+    // Apollo handles state by itself, not necessary to handle ourselves
+    const [ novoUsuarioAcesso ] = useMutation(NOVO_USUARIO_ACESSO);
+
+    const router = useRouter();
 
     const formik = useFormik({
         initialValues: {
@@ -26,14 +46,49 @@ const Cadastro = () => {
                     .required('A senha não pode estar em branco')
                     .min(6, 'A senha precisa ter miníno 6 caracteres')
         }),
-        onSubmit: inputData => {
-            console.log(inputData);
+        onSubmit: async inputData => {
+
+            const { nome, email, cpf, senha } = inputData
+
+            try {
+                const { data } = await novoUsuarioAcesso({
+                    variables: {
+                        "input":{
+                            nome,
+                            email,
+                            cpf,
+                            senha
+                        }
+                    }
+                });
+               saveMessage(`Usuário cadastrado com sucesso`);
+
+                setTimeout(() => {
+                    saveMessage(null);
+                    router.push('/login');
+                }, 2000);
+            } catch (error) {
+                saveMessage(error.message.replace('GraphQL error: ', ''));
+
+                setTimeout(() => {
+                    saveMessage(null);
+                }, 3000);
+            }
         }
     });
+
+    const showMessage = () => {
+        return(
+            <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
+                <p>{message}</p>
+            </div>
+        )
+    }
 
     return (
         <>
             <Layout>
+                { message && showMessage() }
                 <h1 className="text-center text-2xl text-white font-light">Cadastro e-CNDV</h1>
 
                 <div className="flex justify-center mt-5">
