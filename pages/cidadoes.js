@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from "../components/Layout";
 import { gql, useQuery } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 const OBTENER_CIDADOES = gql`
     query obtenerCidadoes{
@@ -27,9 +28,14 @@ const OBTENER_CIDADOES = gql`
 
 const Cidadoes = () => {
 
-    const { data, loading, error } = useQuery(OBTENER_CIDADOES);
+    const router = useRouter();
 
+    const { data, loading, error } = useQuery(OBTENER_CIDADOES);
     if (loading) return 'Carregando...';
+
+   /* if(!data) {
+        return router.push('/login');
+    }*/
 
     return (
         <div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from "../components/Layout";
 import { gql, useQuery } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 const OBTENER_HISTORICO_VACINACAO = gql`
    query obtenerHistoricoVacinacao($cpf: String!){
@@ -21,9 +22,14 @@ const OBTENER_HISTORICO_VACINACAO = gql`
 
 const Historico_Vacinacao = () => {
 
-    const { data, loading, error } = useQuery(OBTENER_HISTORICO_VACINACAO);
+    const router = useRouter();
 
+    const { data, loading, error } = useQuery(OBTENER_HISTORICO_VACINACAO);
     if (loading) return 'Carregando...';
+
+   /* if(!data) {
+        return router.push('/login');
+    }*/
 
     return (
         <div>
