@@ -81,7 +81,7 @@ const Login = () => {
         <>
             <Layout>
                 { message && showMessage() }
-                <h1 className="text-center text-2xl text-white font-light">e-CNDV</h1>
+                <h1 className="text-center text-2xl text-white font-light">CNDV</h1>
 
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-sm">

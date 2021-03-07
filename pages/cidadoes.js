@@ -33,9 +33,9 @@ const Cidadoes = () => {
     const { data, loading, error } = useQuery(OBTENER_CIDADOES);
     if (loading) return 'Carregando...';
 
-   /* if(!data) {
+    if(!data) {
         return router.push('/login');
-    }*/
+    }
 
     return (
         <div>

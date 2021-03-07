@@ -1,5 +1,6 @@
 import React from 'react';
 import Layout from "../components/Layout";
+import Campanha from "../components/Campanha";
 import { gql, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -20,13 +21,11 @@ const OBTENER_CAMPANHAS = gql`
 const Campanhas = () => {
 
     const router = useRouter();
-
     const { data, loading, error } = useQuery(OBTENER_CAMPANHAS);
-    console.log(data)
 
     if (loading) return 'Carregando...';
 
-   /* if(!data) {
+    /*if(!data) {
         return router.push('/login');
     }*/
 
@@ -51,14 +50,10 @@ const Campanhas = () => {
                     </thead>
                     <tbody className="bg-white">
                     {data.obtenerCampanhas.map(campanha => (
-                        <tr key={campanha.id}>
-                            <td className="border px-4 py-2">{campanha.nome}</td>
-                            <td className="border px-4 py-2">{campanha.idade_inicio}</td>
-                            <td className="border px-4 py-2">{campanha.idade_final}</td>
-                            <td className="border px-4 py-2">{campanha.municipio}</td>
-                            <td className="border px-4 py-2">{campanha.uf}</td>
-                            <td className="border px-4 py-2">Editar</td>
-                        </tr>
+                        <Campanha
+                            key={campanha.id}
+                            campanha={campanha}
+                        />
                     ))}
                     </tbody>
                 </table>
