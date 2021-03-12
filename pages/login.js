@@ -56,7 +56,7 @@ const Login = () => {
 
                 setTimeout(() => {
                     saveMessage(null);
-                    router.push('/campanhas');
+                    router.push('/campanhas/dashboard');
                 }, 2000);
 
             } catch (error) {

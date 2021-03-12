@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import Layout from "../../components/Layout";
+import Layout from "../../../components/Layout";
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { Formik } from 'formik';
 import * as Yup from "yup";
@@ -14,7 +14,7 @@ const OBTENER_CAMPANHA = gql`
         nome
         idade_inicio
         idade_final
-        municipio
+        cidade
         uf
       }
     }
@@ -27,7 +27,7 @@ const ATUALIZAR_CAMPANHA = gql`
             nome
             idade_inicio
             idade_final
-            municipio
+            cidade
             uf
         }
     }
@@ -44,7 +44,22 @@ const EditarCampanha = () => {
         }
     });
 
-    const [ atualizarCampanha ] = useMutation(ATUALIZAR_CAMPANHA);
+    const [ atualizarCampanha ] = useMutation(ATUALIZAR_CAMPANHA, {
+        refetchQueries: [{
+            query: gql`
+                query obtenerCampanha($id: ID) {
+                  obtenerCampanha(id: $id){
+                    id
+                    nome
+                    idade_inicio
+                    idade_final
+                    cidade
+                    uf
+                  }
+                }
+        `, variables: { id }
+        }]
+    });
 
     const schemaValidation = Yup.object({
         nome: Yup.string()
@@ -53,7 +68,7 @@ const EditarCampanha = () => {
             .required('Defina a idade inicial do límite de idade'),
         idade_final: Yup.string()
             .required('Defina a idade final do límite de idade'),
-        municipio: Yup.string()
+        cidade: Yup.string()
             .required('Defina o munícipio da campanha'),
         uf: Yup.string()
             .required('Defina o estado (UF)')
@@ -64,7 +79,7 @@ const EditarCampanha = () => {
     const { obtenerCampanha } = data;
 
     const atualizarInfoCampanha = async values => {
-        const { nome, idade_inicial, idade_final, municipio, uf } = values;
+        const { nome, idade_inicio, idade_final, cidade, uf } = values;
 
         try {
             await atualizarCampanha({
@@ -72,9 +87,9 @@ const EditarCampanha = () => {
                     id,
                     input: {
                         nome,
-                        idade_inicial,
+                        idade_inicio,
                         idade_final,
-                        municipio,
+                        cidade,
                         uf
                     }
                 }
@@ -86,7 +101,7 @@ const EditarCampanha = () => {
                 'success'
             )
 
-            router.push('/dashboard');
+            router.push('/campanhas/dashboard');
         } catch (error) {
             console.log(error);
         }
@@ -175,23 +190,23 @@ const EditarCampanha = () => {
                                 ) : null }
 
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="municipio">
-                                        Município
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="cidade">
+                                        Cidade
                                     </label>
                                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                           id="municipio"
+                                           id="cidade"
                                            type="text"
                                            placeholder="Município"
                                            onChange={props.handleChange}
                                            onBlur={props.handleBlur}
-                                           value={props.values.municipio}
+                                           value={props.values.cidade}
                                     />
                                 </div>
 
-                                { props.touched.municipio && props.errors.municipio ? (
+                                { props.touched.cidade && props.errors.cidade ? (
                                     <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
                                         <p className="font-bold">Error</p>
-                                        <p>{props.errors.municipio}</p>
+                                        <p>{props.errors.cidade}</p>
                                     </div>
                                 ) : null }
 

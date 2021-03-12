@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from "../components/Layout";
-import Campanha from "../components/Campanha";
+import Layout from "../../components/Layout";
+import Campanha from "../../components/campanhas/Campanha";
 import { gql, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -12,13 +12,13 @@ const OBTENER_CAMPANHAS = gql`
             nome
             idade_inicio
             idade_final
-            municipio
+            cidade
             uf
         }
     }
 `;
 
-const Campanhas = () => {
+const Dashboard = () => {
 
     const router = useRouter();
     const { data, loading, error } = useQuery(OBTENER_CAMPANHAS);
@@ -33,7 +33,7 @@ const Campanhas = () => {
         <div>
             <Layout>
                 <h1 className="text-2xl text-gray-800 font-light">Campanhas</h1>
-                <Link href="/novacampanha">
+                <Link href="/campanhas/novacampanha">
                     <a className="bg-blue-800 py-2 px-5 mt-5 inline-block text-white rounded text-sm hover:bg-gray-800 mb-3 uppercase font-bold">Nova Campanha</a>
                 </Link>
 
@@ -61,5 +61,4 @@ const Campanhas = () => {
         </div>
     );
 }
-
-export default Campanhas;
+export default Dashboard;

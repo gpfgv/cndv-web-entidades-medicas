@@ -17,7 +17,7 @@ const OBTENER_CAMPANHAS = gql`
             nome
             idade_inicio
             idade_final
-            municipio
+            cidade
             uf
         }
     }
@@ -39,7 +39,7 @@ const Campanha = ({ campanha }) => {
             })
         }
     } );
-    const { nome, idade_inicio, idade_final, municipio, uf } = campanha;
+    const { nome, idade_inicio, idade_final, cidade, uf } = campanha;
 
     const confirmarEliminarCampanha = id => {
         Swal.fire({
@@ -74,7 +74,7 @@ const Campanha = ({ campanha }) => {
 
     const editarCampanha = id => {
         Router.push({
-            pathname: "/editarcampanha/[id]",
+            pathname: "/campanhas/editarcampanha/[id]",
             query: { id }
         })
     }
@@ -84,7 +84,7 @@ const Campanha = ({ campanha }) => {
             <td className="border px-4 py-2">{campanha.nome}</td>
             <td className="border px-4 py-2">{campanha.idade_inicio}</td>
             <td className="border px-4 py-2">{campanha.idade_final}</td>
-            <td className="border px-4 py-2">{campanha.municipio}</td>
+            <td className="border px-4 py-2">{campanha.cidade}</td>
             <td className="border px-4 py-2">{campanha.uf}</td>
             <td className="border px-4 py-2">
                 <button

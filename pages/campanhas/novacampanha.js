@@ -1,18 +1,19 @@
-import React from 'react';
-import Layout from '../components/Layout';
+import React, { useEffect, useState, useContext } from 'react';
+import Layout from '../../components/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
+import AddCidade from "../../components/campanhas/AddCidade";
+import CampanhaContext from "../../context/campanhas/CampanhaContext";
 
 const NOVA_CAMPANHA = gql`
 mutation novaCampanha($input: CampanhaInput) {
-  novaCampanha(input: $input) {
-    id
+  novaCampanha(input: $input) {    
     nome
     idade_inicio
     idade_final
-    municipio
+    cidade
     uf
   }
 }
@@ -34,72 +35,82 @@ const OBTENER_CAMPANHAS = gql`
 
 const NovaCampanha = () => {
 
+    // Use context and extract functions and values
+    const campanhaContext = useContext(CampanhaContext);
+    const { cidade } = campanhaContext;
+
     const router = useRouter();
 
-    const [ novaCampanha ] = useMutation(NOVA_CAMPANHA);
-
-    // Using Apollo Cache mechanism insted of refreshing
-    // However as our insert query resolver and MySQL does not r
-    /* const [ novaCampanha ] = useMutation(NOVA_CAMPANHA, {
-        update(cache, { data: { novaCampanha }}) {
-            // Obtain object from cache that we want to update
-            const { obtenerCampanhas } = cache.readQuery({ query: OBTENER_CAMPANHAS });
-
-            // Re write cache, never write/modified directly as it inmutable
-            cache.writeQuery({
-                query: OBTENER_CAMPANHAS,
-                data: {
-                    obtenerCampanhas: [...obtenerCampanhas, novaCampanha]
+    const [ novaCampanha ] = useMutation(NOVA_CAMPANHA, {
+        refetchQueries: [{
+            query: gql`
+                query obtenerCampanhas{
+                    obtenerCampanhas{
+                        id
+                        nome
+                        idade_inicio
+                        idade_final
+                        cidade
+                        uf
+                    }
                 }
-            })
-        }
+            `,
+        }],
     });
-    */
-     const formik = useFormik({
-         initialValues: {
-             nome: '',
-             idade_inicio: '',
-             idade_final: '',
-             municio: '',
-             uf: ''
-         },
-         validationSchema: Yup.object({
-             nome: Yup.string()
-                 .required('O nome é obrigatório'),
-             idade_inicio: Yup.string()
-                 .required('Defina a idade inicial do límite de idade'),
-             idade_final: Yup.string()
-                 .required('Defina a idade final do límite de idade'),
-             municipio: Yup.string()
-                 .required('Defina o munícipio da campanha'),
-             uf: Yup.string()
-                 .required('Defina o estado (UF)')
-         }),
-         onSubmit: async inputData => {
 
-             const { nome, idade_inicio, idade_final, municipio, uf } = inputData;
+    const validarCampanha = () => {
+        //console.log('vacina sim');
+        return cidade.length === 0 ? "opacity-50 cursor-not-allowed": "";
+    }
 
-             try {
+    const createNovaCampanha = () => {
+        console.log(cidade.cidade);
+
+        // TODO call novaCampanha Mutation
+    }
+
+    const formik = useFormik({
+        initialValues: {
+            nome: '',
+            idade_inicio: '',
+            idade_final: '',
+            uf: ''
+        },
+        validationSchema: Yup.object({
+            nome: Yup.string()
+                .required('O nome é obrigatório'),
+            idade_inicio: Yup.string()
+                .required('Defina a idade inicial do límite de idade'),
+            idade_final: Yup.string()
+                .required('Defina a idade final do límite de idade'),
+            uf: Yup.string()
+                .required('Defina o estado (UF)')
+        }),
+        onSubmit: async inputData => {
+
+            const { nome, idade_inicio, idade_final, uf } = inputData;
+
+            try {
                 const { data } = await novaCampanha({
                     variables: {
                         input: {
                             nome,
                             idade_inicio,
                             idade_final,
-                            municipio,
+                            cidade: cidade.cidade, // Data comes from useReducer in CampanhaState
                             uf
                         }
                     }
                 });
-                    router.push('/campanhas');
-             } catch (error) {
+                router.push('/campanhas/dashboard');
+            } catch (error) {
                 console.log(error);
-             }
-         }
-     })
+            }
+        }
+    })
 
-     return (
-         <Layout>
+    return (
+        <Layout>
             <h1 className="text-2xl text-gray-800 font-light">Nova Campanha</h1>
 
             <div className="flex justify-center mt-5">
@@ -172,22 +183,9 @@ const NovaCampanha = () => {
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="municipio">
                                 Município
                             </label>
-                            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                   id="municipio"
-                                   type="text"
-                                   placeholder="Município"
-                                   onChange={formik.handleChange}
-                                   onBlur={formik.handleBlur}
-                                   value={formik.values.municipio}
-                            />
+                                <AddCidade />
                         </div>
 
-                        { formik.touched.municipio && formik.errors.municipio ? (
-                            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                                <p className="font-bold">Error</p>
-                                <p>{formik.errors.municipio}</p>
-                            </div>
-                        ) : null }
 
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="uf">
@@ -210,25 +208,16 @@ const NovaCampanha = () => {
                             </div>
                         ) : null }
 
-                        {/*<div className="mb-4">
-                            <label className="block">
-                                <span className="text-gray-700">Select</span>
-                                <select className="form-select block w-full mt-1">
-                                    <option>Option 1</option>
-                                    <option>Option 2</option>
-                                </select>
-                            </label>
-                        </div>*/}
                         <input
                             type="submit"
-                            className="bg-blue-900 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900"
+                            className={`bg-blue-900 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900 ${ validarCampanha()}`}
                             value="Adicionar"
                         />
 
                     </form>
                 </div>
             </div>
-         </Layout>
-     )
+        </Layout>
+    )
 }
 export default NovaCampanha;
