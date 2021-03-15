@@ -222,6 +222,43 @@ const EditarCampanha = () => {
                                            onBlur={props.handleBlur}
                                            value={props.values.uf}
                                     />
+                                    <select
+                                        name="uf"
+                                        id="uf"
+                                        value={props.uf}
+                                        onChange={props.handleChange}
+                                        onBlur={props.handleBlur}
+                                        className="shadow border rounded bg-white w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    >
+                                        <option value="" label="Selecione o UF" />
+                                        <option value="AC" label="ACRE" />
+                                        <option value="AL" label="ALAGOAS" />
+                                        <option value="AM" label="AMAZONAS" />
+                                        <option value="AP" label="AMAPÁ" />
+                                        <option value="BA" label="BAHIA" />
+                                        <option value="CE" label="CEARÁ" />
+                                        <option value="DF" label="DISTRITO FEDERAL" />
+                                        <option value="ES" label="ESPÍRITO SANTO" />
+                                        <option value="GO" label="GOIÁS" />
+                                        <option value="MA" label="MARANHÃO" />
+                                        <option value="MG" label="MINAS GERAIS" />
+                                        <option value="MS" label="MATO GROSSO DO SUL" />
+                                        <option value="MT" label="MATO GROSSO" />
+                                        <option value="PA" label="PARÁ" />
+                                        <option value="PB" label="PARAÍBA" />
+                                        <option value="PE" label="PERNAMBUCO" />
+                                        <option value="PI" label="PIAUÍ" />
+                                        <option value="PR" label="PARANÁ" />
+                                        <option value="RJ" label="RIO DE JANEIRO" />
+                                        <option value="RN" label="RIO GRANDE DO NORTE" />
+                                        <option value="RO" label="RONDÔNIA" />
+                                        <option value="RR" label="RORAIMA" />
+                                        <option value="RS" label="RIO GRANDE DO SUL" />
+                                        <option value="SC" label="SANTA CATARINA" />
+                                        <option value="SE" label="SERGIPE" />
+                                        <option value="SP" label="SÃO PAULO" />
+                                        <option value="TO" label="TOCANTINS" />
+                                    </select>
                                 </div>
 
                                 { props.touched.uf && props.errors.uf ? (
