@@ -16,6 +16,7 @@ const OBTENER_CAMPANHA = gql`
         idade_final
         cidade
         uf
+        descricao
       }
     }
 `;
@@ -29,6 +30,7 @@ const ATUALIZAR_CAMPANHA = gql`
             idade_final
             cidade
             uf
+            descricao
         }
     }
 `;
@@ -55,6 +57,7 @@ const EditarCampanha = () => {
                     idade_final
                     cidade
                     uf
+                    descricao
                   }
                 }
         `, variables: { id }
@@ -71,7 +74,8 @@ const EditarCampanha = () => {
         cidade: Yup.string()
             .required('Defina o munícipio da campanha'),
         uf: Yup.string()
-            .required('Defina o estado (UF)')
+            .required('Defina o estado (UF)'),
+        descricao: Yup.string()
     });
 
     if(loading) return "Carregando campanha...";
@@ -79,7 +83,7 @@ const EditarCampanha = () => {
     const { obtenerCampanha } = data;
 
     const atualizarInfoCampanha = async values => {
-        const { nome, idade_inicio, idade_final, cidade, uf } = values;
+        const { nome, idade_inicio, idade_final, cidade, uf, descricao } = values;
 
         try {
             await atualizarCampanha({
@@ -90,7 +94,8 @@ const EditarCampanha = () => {
                         idade_inicio,
                         idade_final,
                         cidade,
-                        uf
+                        uf,
+                        descricao
                     }
                 }
             })
@@ -214,14 +219,6 @@ const EditarCampanha = () => {
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="uf">
                                         UF
                                     </label>
-                                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                           id="uf"
-                                           type="text"
-                                           placeholder="UF"
-                                           onChange={props.handleChange}
-                                           onBlur={props.handleBlur}
-                                           value={props.values.uf}
-                                    />
                                     <select
                                         name="uf"
                                         id="uf"
@@ -267,6 +264,13 @@ const EditarCampanha = () => {
                                         <p>{props.errors.uf}</p>
                                     </div>
                                 ) : null }
+
+                                <div className="mb-4">
+                                    <label htmlFor="descricao">Descrição</label>
+                                    <textarea
+                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        name="descricao" rows="6" value={props.values.descricao} onChange={props.handleChange} placeholder="Coloque aqui sua descrição">{props.values.descricao}</textarea>
+                                </div>
 
                                 <input
                                     type="submit"

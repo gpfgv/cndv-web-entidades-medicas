@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import Layout from '../../components/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -15,6 +15,7 @@ mutation novaCampanha($input: CampanhaInput) {
     idade_final
     cidade
     uf
+    descricao
   }
 }
 `;
@@ -29,6 +30,7 @@ const OBTENER_CAMPANHAS = gql`
             idade_final
             municipio
             uf
+            descricao
         }
     }
 `;
@@ -52,6 +54,7 @@ const NovaCampanha = () => {
                         idade_final
                         cidade
                         uf
+                        descricao
                     }
                 }
             `,
@@ -74,10 +77,12 @@ const NovaCampanha = () => {
             nome: '',
             idade_inicio: '',
             idade_final: '',
-            uf: ''
+            uf: '',
+            descricao: '',
         },
         validationSchema: Yup.object({
             nome: Yup.string()
+                .max(30, "Deve ter no máximo 30 caracteres o título")
                 .required('O nome é obrigatório'),
             idade_inicio: Yup.string()
                 .required('Defina a idade inicial do límite de idade'),
@@ -88,7 +93,7 @@ const NovaCampanha = () => {
         }),
         onSubmit: async inputData => {
 
-            const { nome, idade_inicio, idade_final, uf } = inputData;
+            const { nome, idade_inicio, idade_final, uf, descricao } = inputData;
 
             try {
                 const { data } = await novaCampanha({
@@ -98,7 +103,8 @@ const NovaCampanha = () => {
                             idade_inicio,
                             idade_final,
                             cidade: cidade.cidade, // Data comes from useReducer in CampanhaState
-                            uf
+                            uf,
+                            descricao
                         }
                     }
                 });
@@ -109,12 +115,14 @@ const NovaCampanha = () => {
         }
     })
 
+
     return (
         <Layout>
             <h1 className="text-2xl text-gray-800 font-light">Nova Campanha</h1>
 
             <div className="flex justify-center mt-5">
                 <div className="w-full max-w-lg">
+
                     <form
                         className="bg-white shadow-md px-8 pt-6 pb-8 mb-4"
                         onSubmit={formik.handleSubmit}
@@ -187,7 +195,7 @@ const NovaCampanha = () => {
                         </div>
 
                         <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="municipio">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="uf">
                                 UF
                             </label>
                             <select
@@ -235,12 +243,19 @@ const NovaCampanha = () => {
                             </div>
                         ) : null }
 
+                        <div className="mb-4">
+                                <label htmlFor="descricao">Descrição</label>
+                                <textarea
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    name="descricao" value={formik.values.descricao} onChange={formik.handleChange} rows="6" placeholder="Coloque aqui sua descrição" />
+
+                        </div>
+
                         <input
                             type="submit"
                             className={`bg-blue-900 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900 ${ validarCampanha()}`}
                             value="Adicionar"
                         />
-
                     </form>
                 </div>
             </div>
