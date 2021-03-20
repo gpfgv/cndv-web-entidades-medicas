@@ -25,9 +25,9 @@ const Dashboard = () => {
 
     if (loading) return 'Carregando...';
 
-    /*if(!data) {
+    if(!data) {
         return router.push('/login');
-    }*/
+    }
 
     return (
         <div>

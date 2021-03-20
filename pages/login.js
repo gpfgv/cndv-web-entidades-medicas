@@ -3,67 +3,35 @@ import { useRouter } from 'next/router';
 import Layout from "../components/Layout";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { gql, useMutation } from '@apollo/client';
-
-const AUTENTICAR_USUARIO = gql`
-    mutation autenticarUsuario($input: AutenticarInput){
-      autenticarUsuario(input: $input) {
-        token
-      }
-    }
-`;
 
 const Login = () => {
-
     // State for messages
-    const [ message, saveMessage] = useState(null);
-
-    // Apollo handles state by itself, not necessary to handle ourselves
-    const [ autenticatUsuario ] = useMutation(AUTENTICAR_USUARIO);
-
+    const [ message, saveMessage ] = useState(null);
     const router = useRouter();
 
     const formik = useFormik({
         initialValues: {
-           cpf: '',
+           cnpj: '',
            senha: ''
         },
         validationSchema: Yup.object({
-            cpf: Yup.string()
-                .required('O cpf é obrigatório')
-                .min(14, 'O cpf tem que respeitar o seguinte formato: 333.333.333-33')
-                .max(14, 'O cpf tem que respeitar o seguinte formato: 333.333.333-33'),
+            cnpj: Yup.string().required('O cnpj é obrigatório')
+                .min(14, 'O cnpj precisa ter 14 dígitos sem pontos ou símbolos'),
             senha: Yup.string()
                 .required('A senha não pode estar em branco')
         }),
         onSubmit: async inputData => {
 
-            const { cpf, senha } = inputData;
+            const { cnpj, senha } = inputData;
 
-            try {
-                const { data } = await autenticatUsuario({
-                    variables: {
-                        input: {
-                            cpf,
-                            senha
-                        }
-                    }
-                });
-
-                saveMessage('Autenticando...');
-                const { token } = data.autenticarUsuario;
-                localStorage.setItem('token', token);
-
+            if(cnpj == '07346574000165' && senha == 'cndv123456789'){
                 setTimeout(() => {
                     saveMessage(null);
                     router.push('/campanhas/dashboard');
                 }, 2000);
-
-            } catch (error) {
-                saveMessage(error.message.replace('GraphQL error: ', ''));
-
+            }else{
                 setTimeout(() => {
-                    saveMessage(null);
+                    saveMessage("Por favor verifique os dados de acesso!");
                 }, 3000);
             }
         }
@@ -90,23 +58,23 @@ const Login = () => {
                            onSubmit={formik.handleSubmit}
                        >
                            <div className="mb-4">
-                               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="cpf">
-                                    CPF
+                               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="cnpj">
+                                    CNPJ
                                </label>
                                <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                      id="cpf"
+                                      id="cnpj"
                                       type="text"
-                                      placeholder="CPF"
+                                      placeholder="CNPJ"
                                       onChange={formik.handleChange}
                                       onBlur={formik.handleBlur}
-                                      value={formik.values.cpf}
+                                      value={formik.values.cnpj}
                                />
                            </div>
 
-                           { formik.touched.cpf && formik.errors.cpf ? (
+                           { formik.touched.cnpj && formik.errors.cnpj ? (
                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
                                    <p className="font-bold">Error</p>
-                                   <p>{formik.errors.cpf}</p>
+                                   <p>{formik.errors.cnpj}</p>
                                </div>
                            ) : null }
 
