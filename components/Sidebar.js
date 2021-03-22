@@ -13,14 +13,14 @@ const Sidebar = ({ children }) => {
               <p className="text-white text-2xl font-black">CNDV Admin</p>
           </div>
           <nav className="mt-5 list-none">
-              <li className={router.pathname === "/campanhas/dashboard" ? "bg-blue-600 p-2" : "p-2"}>
-                  <Link href="/campanhas/dashboard">
+              <li className={router.pathname === "/" ? "bg-blue-600 p-2" : "p-2"}>
+                  <Link href="/">
                       <a className="text-white block">
                           Campanhas
                       </a>
                   </Link>
               </li>
-              <li className={router.pathname === "/entidades" ? "bg-blue-600 p-2" : "p-2"}>
+              {/*<li className={router.pathname === "/entidades" ? "bg-blue-600 p-2" : "p-2"}>
                   <Link href="/entidades">
                       <a className="text-white block">
                           Entidades
@@ -33,7 +33,7 @@ const Sidebar = ({ children }) => {
                           Cidadões
                       </a>
                   </Link>
-              </li>
+              </li>*/}
           </nav>
       </aside>
     );

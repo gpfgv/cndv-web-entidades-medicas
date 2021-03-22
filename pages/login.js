@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/client';
 import Layout from "../components/Layout";
 import { useFormik } from 'formik';
 import { signIn } from 'next-auth/client';
@@ -8,6 +9,7 @@ import * as Yup from 'yup';
 const Login = () => {
     // State for messages
     const [ message, saveMessage ] = useState(null);
+    const [ isLoading, setIsLoading ] = useState(true);
     const router = useRouter();
 
     const formik = useFormik({
@@ -22,9 +24,7 @@ const Login = () => {
                 .required('A senha não pode estar em branco')
         }),
         onSubmit: async inputData => {
-
             const { cnpj, senha } = inputData;
-
             /// TODO Temporary until we have authentication with CNPJ
             if(cnpj == '07346574000165' && senha == 'cndv123456789'){
                 const result = await signIn('credentials',{
@@ -46,7 +46,21 @@ const Login = () => {
                 }, 3000);
             }
         }
-    })
+    });
+
+    useEffect(() => {
+        getSession().then(session => {
+            if(session) {
+                router.replace('/');
+            } else {
+                setIsLoading(false);
+            };
+        });
+    }, [router]);
+
+    if(isLoading) {
+        return <p>Carregando...</p>;
+    }
 
     const showMessage = () => {
         return(

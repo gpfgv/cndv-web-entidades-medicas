@@ -106,7 +106,7 @@ const EditarCampanha = () => {
                 'success'
             )
 
-            router.push('/campanhas/dashboard');
+            router.push('/');
         } catch (error) {
             console.log(error);
         }

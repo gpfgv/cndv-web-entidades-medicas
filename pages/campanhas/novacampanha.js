@@ -108,7 +108,7 @@ const NovaCampanha = () => {
                         }
                     }
                 });
-                router.push('/campanhas/dashboard');
+                router.push('/');
             } catch (error) {
                 console.log(error);
             }
