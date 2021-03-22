@@ -26,10 +26,6 @@ const Index = () => {
 
     if (loading) return 'Carregando...';
 
-    if(!data) {
-        return router.push('/login');
-    }
-
     return (
         <div>
             <Layout>
