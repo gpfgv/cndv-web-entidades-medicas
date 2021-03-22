@@ -6,6 +6,7 @@ import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import AddCidade from "../../components/campanhas/AddCidade";
 import CampanhaContext from "../../context/campanhas/CampanhaContext";
+import {getSession} from "next-auth/client";
 
 const NOVA_CAMPANHA = gql`
 mutation novaCampanha($input: CampanhaInput) {
@@ -262,4 +263,22 @@ const NovaCampanha = () => {
         </Layout>
     )
 }
+
+export async function getServerSideProps(context) {
+    const session = await getSession({ req: context.req });
+
+    if(!session) {
+        return {
+            redirect: {
+                destination: '/login',
+                permanent: false,
+            },
+        };
+    }
+
+    return {
+        props: { session },
+    };
+}
+
 export default NovaCampanha;
