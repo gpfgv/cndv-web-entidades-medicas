@@ -1,6 +1,6 @@
 import React from 'react';
-import { gql} from '@apollo/client';
-import {useRouter} from "next/router";
+import { useQuery, gql} from '@apollo/client';
+import { useRouter } from 'next/router';
 
 const OBTENER_USUARIO = gql`
         query obtenerUsuario{
@@ -16,6 +16,15 @@ const Header = () => {
 
     const router = useRouter();
 
+    const { data, loading, error } = useQuery(OBTENER_USUARIO);
+    if (loading) return 'Carregando...';
+
+    if(!data) {
+        return router.push('/login');
+    }
+
+    const { cpf, nome, email } = data.obtenerUsuario;
+
     const closeSession = () => {
         localStorage.removeItem('token');
         router.push('/login');
@@ -23,7 +32,7 @@ const Header = () => {
 
     return (
         <div className="flex justify-between mb-6">
-            <p className="mr-2">Bem-vindo Admin</p>
+            <p className="mr-2">Bem-vindo { nome } ( {cpf} )</p>
             <button
                 onClick={() => closeSession() }
                 type="button"

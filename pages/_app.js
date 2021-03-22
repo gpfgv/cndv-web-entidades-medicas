@@ -8,13 +8,9 @@ import '../styles/globals.css'
 function MyApp({ Component, pageProps }) {
   return (
       <ApolloProvider client={apolloClient}>
-          <AuthProvider>
-              <ProtectRoute>
                   <CampanhaState>
                       <Component {...pageProps} />
                   </CampanhaState>
-              </ProtectRoute>
-          </AuthProvider>
       </ApolloProvider>
   )
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Layout from "../components/Layout";
 import { useFormik } from 'formik';
+import { signIn } from 'next-auth/client';
 import * as Yup from 'yup';
 
 const Login = () => {
@@ -24,11 +25,21 @@ const Login = () => {
 
             const { cnpj, senha } = inputData;
 
+            /// TODO Temporary until we have authentication with CNPJ
             if(cnpj == '07346574000165' && senha == 'cndv123456789'){
-                setTimeout(() => {
-                    saveMessage(null);
-                    router.push('/campanhas/dashboard');
-                }, 2000);
+                const result = await signIn('credentials',{
+                   redirect: false,
+                   cnpj: cnpj,
+                   password: senha
+                });
+                console.log(result);
+                if (!result.error) {
+                    setTimeout(() => {
+                        saveMessage(null);
+                        //router.replace('/campanhas/dashboard')
+                        router.replace('/');
+                    }, 2000);
+                }
             }else{
                 setTimeout(() => {
                     saveMessage("Por favor verifique os dados de acesso!");
